@@ -1,0 +1,261 @@
+<html>
+<head>
+	<title>Jetty Purchase Link Generator Prototype</title>
+</head>
+<style>
+
+#wrapper {
+	max-width: 550px;
+	padding-top:50px;
+
+	font-family: "GT Eesti Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+	
+.instructions {
+	margin-bottom: 30px;
+
+}
+
+#wrapper table td {
+	padding: 5 10 5 10;
+}
+
+#wrapper input {
+	width: 300px;
+	font-size: 14px;
+	padding: 5px;
+}
+
+#wrapper input:read-only {
+	color: #AAAAAA;
+}
+
+#wrapper a {
+	color: blue;
+}
+
+
+</style>
+<script>
+<!--
+
+function setup() {
+
+	// Set defaults, possibly from URL params
+	setDefaults();
+
+	// Calculate based on defaults
+	updateComputedFields();
+
+	// Set up the JS to update the computed fields
+	// whenever the inputs are changed
+	registerForChanges();
+
+	
+}
+
+
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+function setDefaults() {
+
+	var partnerSlug = getUrlVars()["PartnerSlug"];
+	if (!partnerSlug) 
+		partnerSlug = "redlands";
+
+	var buildingId = getUrlVars()["BuildingId"];
+	if (!buildingId) 
+		buildingId = "f9ca5018b7774d10b4190d039c94baac";
+
+	var coverageAmt = getUrlVars()["CoverageAmt"];
+	if (!coverageAmt) 
+		coverageAmt = "500";
+
+
+	document.getElementById("partnerSlugField").value = partnerSlug;
+	document.getElementById("buildingIdField").value = buildingId;
+	document.getElementById("coverageAmtField").value = coverageAmt;
+}
+
+
+
+
+
+
+function copyUrl() {
+	var copyText = document.getElementById("purchaseURLField");
+
+  	/* Select the text field */
+ 	copyText.select(); 
+ 	copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+	/* Copy the text inside the text field */
+	document.execCommand("copy");
+
+	/* Alert the copied text */
+	alert("Copied the text: " + copyText.value);
+
+}
+
+
+function updateComputedFields() {
+	setComputedFields(getPartnerSlug(),
+		getBuildingId(),
+		getCoverageAmt());
+
+	return false;
+
+}
+
+function registerForChanges() {
+
+	// Just recompute computed fields whenever anything is changed
+	document.getElementById("partnerSlugField").addEventListener(
+		"input", updateComputedFields);
+
+	document.getElementById("buildingIdField").addEventListener(
+		"input", updateComputedFields);
+
+	document.getElementById("coverageAmtField").addEventListener(
+		"input", updateComputedFields);
+
+}
+
+
+function setComputedFields(partnerSlug, buildingID, coverageAmount) {
+
+	// Calculate the computed fields
+	var url = makePurchaseURL(partnerSlug, buildingID, coverageAmount);
+	var fee = getJettyPrice(coverageAmount);
+
+
+	// Update the relevant parts of the UI
+	setFeeFields(fee);
+	setLinkFields(url);
+	
+}
+
+
+function getPartnerSlug() {
+	return document.getElementById("partnerSlugField").value;
+}
+
+function getBuildingId() {
+	return document.getElementById("buildingIdField").value;
+}
+
+function getCoverageAmt() {
+	var amtStr = document.getElementById("coverageAmtField").value;
+	return parseInt(amtStr.replace(/[^0-9\.]+/g,""),10);
+}
+
+
+function setLinkFields(purchaseURL) {
+	document.getElementById("purchaseURLField").value = purchaseURL;
+	document.getElementById("testLink").href = purchaseURL;
+
+}
+
+function setFeeFields(fee) {
+	var feeDiv = document.getElementById("jettyFeeArea");
+	feeDiv.innerHTML = "$" + fee;
+
+}
+
+
+function getJettyPrice(coverageAmt) {
+	// Minimum is $500
+	var amt = Math.max(500, coverageAmt);
+
+	// Fee is 17.5% rounded up to the next dollar
+	var fee = Math.ceil(amt * 0.175);
+
+	return fee;
+}
+
+// Generate the deep link given the partnerSlug, buildingId, and coverageAmount. E.g.,
+//  https://marketing-site.rbalicki2.jetty.com/app/partner/redlands/?skipInitialStep=1&buildingId=f9ca5018b7774d10b4190d039c94baac&policyRequests%5B0%5D%5BquoteRequest%5D%5BsecurityDepositAmount%5D=2323
+
+function makePurchaseURL(partnerSlug, buildingID, coverageAmt) {
+	
+
+
+	// Concat the URL
+	var url = "https://marketing-site.rbalicki2.jetty.com/app/partner/"
+		+ partnerSlug
+		+ "?skipInitialStep=1&buildingId="
+		+ buildingID
+		+ "&policyRequests%5B0%5D%5BquoteRequest%5D%5BsecurityDepositAmount%5D="
+		+ coverageAmt;
+
+	return url;
+}
+
+-->
+</script>
+
+<body onload="setup()">
+
+<center>
+
+<div id="wrapper">
+
+<img src="jetty_logo.png" width=150/>
+
+<h1>Generate a customised Jetty purchase link</h1>
+
+<div class="instructions">Enter your property details and the coverage you want for a resident. The tool will calculate the price of a Jetty policy — and provide a link you can send to the resident to purchase.</div>
+
+<form id="genForm" onsubmit="return updateComputedFields()">
+
+<table>
+<tr>
+	<td>Partner Slug:</td>
+	<td><input type="text" id="partnerSlugField" value=""/></td>
+</tr>
+<tr>
+	<td>Building ID:</td>
+	<td><input type="text" id="buildingIdField" value=""/></td>
+</tr>
+<tr>
+	<td>Coverage amount:</td>
+	<td><input type="text" id="coverageAmtField" value=""/></td>
+</tr>
+<tr class="spacer">
+	<td colspan="2">&nbsp;</td>
+</tr>
+<tr>
+	<td>Jetty cost:</td>
+	<td><div id="jettyFeeArea"></div></td>
+</tr>
+<tr>
+	<td>Purchase URL: </td>
+	<td><input type="text" id="purchaseURLField" readonly/> 
+	<img src="copy.png" height=20 onclick="copyUrl()"/></td>
+</tr>
+<tr>
+	<td></td>
+	<td><a id="testLink" target="_blank">Test link</a></td>
+
+</tr>
+</table>
+
+
+ <input type="hidden" value="Submit">
+
+
+</form>
+
+</center>
+</div>
+
+<br/><br/><br/><br/><br/><br/>
+
+</body>
+</html>
